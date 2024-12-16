@@ -109,7 +109,7 @@ export default function Dashboard() {
                                                 name="email"
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                className="text-gray-500 p-2 border border-gray-300 rounded"
+                                                className="text-gray-500 p-2 border border-gray-300 rounded" readOnly
                                             />
                                         ) : (
                                             <p className="text-gray-500">{user.email}</p>
@@ -128,7 +128,7 @@ export default function Dashboard() {
                                                 name="phone"
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className="text-gray-500 p-2 border border-gray-300 rounded"
+                                                className="text-gray-500 p-2 border border-gray-300 rounded" readOnly
                                             />
                                         ) : (
                                             <p className="text-gray-500">{address?.phone}</p>
@@ -147,7 +147,7 @@ export default function Dashboard() {
                                                 name="street"
                                                 value={formData.street}
                                                 onChange={handleChange}
-                                                className="text-gray-500 p-2 border border-gray-300 rounded"
+                                                className="text-gray-500 p-2 border border-gray-300 rounded" readOnly
                                             />
                                         ) : (
                                             <p className="text-gray-500">{address?.street}</p>

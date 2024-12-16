@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, message, Spin } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import { Button, message, Spin, Dropdown, Menu } from 'antd';
+import { EyeOutlined, DownOutlined } from '@ant-design/icons';
 import { Link, usePage } from '@inertiajs/react';
 
 const OrderHistory = () => {
@@ -23,7 +23,6 @@ const OrderHistory = () => {
       const response = await axios.delete(`/api/orders/${orderId}`);
       if (response.status === 200) {
         message.success('Đơn hàng đã được hủy thành công');
-        // Update the order list after cancellation
         setOrders(orders.filter(order => order.id !== orderId));
       } else {
         message.error('Không thể hủy đơn hàng');
@@ -82,7 +81,7 @@ const OrderHistory = () => {
             <th scope="col" className="px-6 py-3">Tổng đơn hàng</th>
             <th scope="col" className="px-6 py-3">Trạng thái</th>
             <th scope="col" className="px-6 py-3">Ngày lên đơn</th>
-            <th scope="col" className="px-6 py-3 ">Hành động</th>
+            <th scope="col" className="px-6 py-3">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -93,39 +92,48 @@ const OrderHistory = () => {
               </td>
               <td className="px-6 py-4 text-green-600 dark:text-green-400">
                 <span>{new Intl.NumberFormat('vi-VN').format(order.total_amount)} VNĐ</span>
-
               </td>
-              <td className="px-6 py-4 inline-flex items-center px-3 py-1  text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+              <td className="px-6 py-6 inline-flex items-center px-3 py-1 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
                 {order.name_status}
               </td>
               <td className="px-6 py-4 text-gray-900 dark:text-white">
                 {formatDate(order.created_at)}
               </td>
               <td className="px-6 py-4">
-              <Button
-  type="danger"
-  className={`w-full mr-5 sm:w-auto ${order.name_status === "Giao Hàng Thành công" || order.name_status === "Đang lấy hàng" ? "bg-light-400 border-light-400 text-gray-600 hover:bg-light-400" : "bg-red-600 hover:bg-red-700 text-white border-red-600 border-2 hover:border-red-700"} transition-all duration-300 mb-2`}
-  onClick={() => cancelOrder(order.id)}
-  disabled={order.name_status === "Giao Hàng Thành công" || order.name_status === "Đang lấy hàng"}
->
-  Hủy đơn hàng
-</Button>
+                <Button
+                  type="danger"
+                  className={`w-full mr-5 sm:w-auto ${order.name_status === "Giao Hàng Thành công" || order.name_status === "Đang lấy hàng" ? "bg-light-400 border-light-400 text-gray-600 hover:bg-light-400" : "bg-red-600 hover:bg-red-700 text-white border-red-600 border-2 hover:border-red-700"} transition-all duration-300 mb-2`}
+                  onClick={() => cancelOrder(order.id)}
+                  disabled={order.name_status === "Giao Hàng Thành công" || order.name_status === "Đang lấy hàng"}
+                >
+                  Hủy đơn hàng
+                </Button>
 
-
-                {/* Remove duplicate product IDs using Set */}
-                {order.products
-                  .map(product => product.id) // Get the product IDs
-                  .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
-                  .map(productId => {
-                    const product = order.products.find(p => p.id === productId);
-                    return (
-                      <Link key={productId} href={route('products.show', { id: product.id })}>
-                        <Button type="primary" icon={<EyeOutlined />}>
-                          Xem chi tiết
-                        </Button>
-                      </Link>
-                    );
-                  })}
+                {/* Dropdown menu for products */}
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      {order.products
+                        .map(product => product.id)
+                        .filter((value, index, self) => self.indexOf(value) === index)
+                        .map(productId => {
+                          const product = order.products.find(p => p.id === productId);
+                          return (
+                            <Menu.Item key={productId}>
+                              <Link href={route('products.show', { id: product.id })}>
+                                {product.name}
+                              </Link>
+                            </Menu.Item>
+                          );
+                        })}
+                    </Menu>
+                  }
+                  trigger={['click']}
+                >
+                  <Button type="primary" icon={<DownOutlined />}>
+                    Xem chi tiết
+                  </Button>
+                </Dropdown>
               </td>
             </tr>
           ))}

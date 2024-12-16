@@ -31,9 +31,9 @@ function CartCount() {
         };
 
         fetchCartCount();
-        const intervalId = setInterval(fetchCartCount, 1000); // Gọi API mỗi giây
+        const intervalId = setInterval(fetchCartCount, 6500); // Gọi API mỗi giây
 
-        return () => clearInterval(intervalId); // Dọn dẹp khi component bị unmount
+        return () => clearInterval(intervalId); 
     }, [csrfToken]);
 
     return (

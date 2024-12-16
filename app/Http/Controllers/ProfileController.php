@@ -26,7 +26,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'user' => $user,
-            'address' => $address,  // Truyền thêm thông tin địa chỉ
+            'address' => $address,  
         ]);
     }
 

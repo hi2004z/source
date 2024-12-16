@@ -3,10 +3,13 @@ import { Link } from '@inertiajs/react';
 import { Table, Layout, Typography, Space, Button, message, Row, Col } from 'antd';
 import { EyeOutlined, HeartOutlined } from '@ant-design/icons';
 import axios from 'axios';
-
 const { Header, Content } = Layout;
 const { Title } = Typography;
+const csrfToken = document.head.querySelector('meta[name="csrf-token"]');
 
+if (csrfToken) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken.content;
+}
 function LikedProducts({ wishlists: initialWishlists }) {
     const [wishlists, setWishlists] = useState(initialWishlists);
 
